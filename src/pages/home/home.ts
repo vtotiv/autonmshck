@@ -1,14 +1,29 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import {HttpClient} from "@angular/common/http";
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {}
+  constructor(public navCtrl: NavController, public http: HttpClient) {
+    this.http.get('../../assets/data/00000.json')
+      .subscribe(res => {
+        console.log(res.items);
+        this.data = res.items;
+      });
+
+  }
 
   ctx;
+  data;
+  results = [];
+  box_data = [[751, 113, 832, 211], [542, 112, 587, 187]];
+  tap_data = [];
+  found_objects = 0;
+  taps = 0;
 
   ionViewDidLoad() {
     var canvas = document.getElementById("canvas")
@@ -19,25 +34,97 @@ export class HomePage {
     background.src = "http://localhost:8100/assets/data/0000000000.png";
     background.width = 903;
     background.height = 675;
-
     background.onload = ()=>{
       this.ctx = canvas.getContext("2d");
       this.ctx.drawImage(background, 0, 0,933,282);
     }
   }
+
+  startGame() {
+    const start_time = this.startTimer();
+    const end_time = this.stopTimer();
+    console.log(this.calcuateTime(start_time, end_time))
+  }
+  stopGame() {
+
+  }
+  objectsComputerFound() {
+    for(let b of this.box_data) {
+      const x_oben = b[0];
+      const x_unten = b[2];
+      const y_oben = b[1];
+      const y_unten = b[3];
+      this.ctx.beginPath();
+      this.ctx.lineWidth = "8";
+      this.ctx.strokeStyle= "yellow";
+      this.ctx.rect(x_oben, y_oben,x_unten-x_oben,y_unten-y_oben);
+      this.ctx.stroke();
+    }
+
+  }
   tap(ev){
+    this.taps ++;
     console.log('X: ' +  ev.clientX + 'Y: ' + ev.clientY);
-    this.checkTap(ev.clientX, ev.clientY);
+   // this.checkTap(ev.clientX, ev.clientY);
+    this.logTap(ev.clientX, ev.clientY);
+  }
+  logTap(x,y) {
+    this.tap_data.push([x,y]);
+    console.log(this.tap_data);
+  }
+  // Checks user taps with box_data
+  checkTaps() {
+    this.objectsComputerFound()
+    // iterate over box_data
+    for(let b of this.box_data) {
+      const x_oben = b[0];
+      const x_unten = b[2];
+      const y_oben = b[1];
+      const y_unten = b[3];
+      // iterate over tap_data
+      for(let t of this.tap_data) {
+        if((t[0] >= x_oben && t[0] <= x_unten) && (t[1] >= y_oben && t[1] <= y_unten)){
+          console.log("Korrekt");
+          this.found_objects ++;
+          this.ctx.beginPath();
+          this.ctx.lineWidth = "2";
+          this.ctx.strokeStyle="red";
+          this.ctx.rect(x_oben, y_oben,x_unten-x_oben,y_unten-y_oben);
+          this.ctx.stroke();
+        }else {
+          console.log("No")
+        }
+      }
+    }
+
+  }
+  reset() {
+    this
   }
   checkTap(x, y) {
+    const item = this.data.two;
     if((x>=751 && x <=832) && (y>=113 && y <=211)){
       console.log("Found Cyclist");
       this.ctx.rect(751, 113, 832-751, 211-113);
+      this.ctx.rect(item[0], item[1], item[2]- item[0], item[3]- item[1]);
       this.ctx.lineWidth = "4";
       this.ctx.strokeStyle="red";
       this.ctx.stroke();
     }else {
       console.log("Try again");
     }
+  }
+  startTimer() {
+    const date = new Date();
+    return date.getTime();
+  }
+  stopTimer() {
+    const date = new Date();
+    return date.getTime();
+  }
+  calcuateTime(start, end) {
+    const time = end-start;
+    const date = new Date(time);
+    return date.toDateString();
   }
 }

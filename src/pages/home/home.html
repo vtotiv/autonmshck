@@ -1,3 +1,9 @@
 <ion-content>
   <canvas id="canvas" (click)="tap($event)"></canvas>
+  <button ion-button (click)="startGame()">Spiel starten</button>
+  <button ion-button (click)="checkTaps()">Auswerten</button>
+  <button ion-button (click)="reset()">Reset</button>
+  <p>Anzahl Taps: {{taps}}</p>
+  <p>Anzahl gefundene Objekte: {{found_objects}}</p>
 </ion-content>
+
