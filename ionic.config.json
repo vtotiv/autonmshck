@@ -1,0 +1,7 @@
+{
+  "name": "app-hck",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
