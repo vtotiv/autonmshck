@@ -1,0 +1,30 @@
+<ion-header id="header">
+
+  <ion-navbar>
+    <ion-title>Besser als der Computer?</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar>
+    <div style="display: inline-block;">
+      <p>Auto: {{car}}</p>
+      <p>Du: {{user}}</p>
+    </div>
+    <div style="display: inline-block;">
+      <button ion-button (click)="checkTaps()">Auswerten</button>
+      <button ion-button (click)="reset()">Reset</button>
+    </div>
+  </ion-toolbar>
+
+
+</ion-header>
+
+<ion-content>
+  <canvas id="canvas" (click)="tap($event)"></canvas>
+
+  <p>Anzahl Taps: {{taps}}</p>
+  <p>Anzahl gefundene Objekte: {{found_objects}}</p>
+</ion-content>
+
+<ion-footer text-center>
+  <button ion-button block (click)="dout()">I DOUT IT!</button>
+</ion-footer>
