@@ -8,13 +8,13 @@ import {HttpClient} from "@angular/common/http";
 })
 export class HomePage {
 
+
   constructor(public navCtrl: NavController, public http: HttpClient) {
     this.http.get('../../assets/data/00000.json')
       .subscribe(res => {
         console.log(res.items);
         this.data = res.items;
       });
-
   }
 
   ctx;
@@ -67,6 +67,13 @@ export class HomePage {
     console.log('X: ' +  ev.clientX + 'Y: ' + ev.clientY);
    // this.checkTap(ev.clientX, ev.clientY);
     this.logTap(ev.clientX, ev.clientY);
+
+    this.ctx.beginPath();
+    this.ctx.arc(ev.clientX,ev.clientY,5,0,2*Math.PI);
+    this.ctx.strokeStyle="red";
+    this.ctx.fillStyle = "red";
+    this.ctx.fill();
+    this.ctx.stroke();
   }
   logTap(x,y) {
     this.tap_data.push([x,y]);
@@ -99,7 +106,18 @@ export class HomePage {
 
   }
   reset() {
-    this
+    var canvas = document.getElementById("canvas")
+    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var background = new Image();
+    background.src = "http://localhost:8100/assets/data/0000000000.png";
+    background.width = 903;
+    background.height = 675;
+    background.onload = ()=>{
+      this.ctx = canvas.getContext("2d");
+      this.ctx.drawImage(background, 0, 0,933,282);
+    };
+    this.found_objects = 0;
+    this.taps = 0;
   }
   checkTap(x, y) {
     const item = this.data.two;

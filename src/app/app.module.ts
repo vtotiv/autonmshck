@@ -7,11 +7,17 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import {HttpClientModule} from "@angular/common/http";
+import {GamePage} from "../pages/game/game";
+import {StartPage} from "../pages/start/start";
+import {ManualPage} from "../pages/manual/manual";
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    GamePage,
+    StartPage,
+    ManualPage
   ],
   imports: [
     BrowserModule,
@@ -21,7 +27,10 @@ import {HttpClientModule} from "@angular/common/http";
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    GamePage,
+    StartPage,
+    ManualPage
   ],
   providers: [
     StatusBar,
