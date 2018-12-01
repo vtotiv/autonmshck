@@ -23,6 +23,7 @@ export class GamePage {
   constructor(public navCtrl: NavController, public http: HttpClient, private alertCtrl: AlertController) {}
   listenForUser: boolean = false;
   improvementDatapoint;
+  car_found = 0;
   ctx;
   data;
   results = [];
@@ -30,8 +31,7 @@ export class GamePage {
   tap_data = [];
   found_objects = 0;
   taps = 0;
-
-
+  checked: boolean = false;
 
   ionViewDidLoad() {
     var canvas = document.getElementById("canvas")
@@ -77,13 +77,14 @@ export class GamePage {
 
   }
   tap(ev){
+    console.log(document.getElementById('header').offsetHeight)
     this.taps ++;
     console.log('X: ' +  ev.clientX + 'Y: ' + ev.clientY);
     // this.checkTap(ev.clientX, ev.clientY);
-    this.logTap(ev.clientX, ev.clientY-128);
+    this.logTap(ev.clientX, ev.clientY- document.getElementById('header').offsetHeight);
 
     this.ctx.beginPath();
-    this.ctx.arc(ev.clientX,ev.clientY-128,5,0,2*Math.PI);
+    this.ctx.arc(ev.clientX,ev.clientY-document.getElementById('header').offsetHeight,5,0,2*Math.PI);
     this.ctx.strokeStyle="red";
     this.ctx.fillStyle = "red";
     this.ctx.fill();
@@ -107,6 +108,8 @@ export class GamePage {
   }
   // Checks user taps with box_data
   checkTaps() {
+    this.car_found = this.box_data.length;
+    this.found_objects = 0;
     this.objectsComputerFound()
     // iterate over box_data
     for(let b of this.box_data) {
@@ -128,8 +131,25 @@ export class GamePage {
           console.log("No")
         }
       }
+      this.checked = true;
     }
 
+  }
+  newGame() {
+    this.checked = false;
+    this.found_objects = 0;
+    this.car_found = 0;
+    this.taps = 0;
+    var canvas = document.getElementById("canvas")
+    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var background = new Image();
+    background.src = "http://localhost:8100/assets/data/0000000069.png";
+    background.width = 903;
+    background.height = 675;
+    background.onload = ()=>{
+      this.ctx = canvas.getContext("2d");
+      this.ctx.drawImage(background, 0, 0,933,282);
+    };
   }
   reset() {
     var canvas = document.getElementById("canvas")

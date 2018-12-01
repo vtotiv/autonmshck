@@ -21,7 +21,6 @@ export class StartPage {
   start() {
     this.navCtrl.push(GamePage);
   }
-
   manual(){
     this.navCtrl.push(ManualPage);
   }

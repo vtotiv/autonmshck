@@ -6,12 +6,16 @@
 
   <ion-toolbar>
     <div style="display: inline-block;">
-      <p>Auto: {{car}}</p>
-      <p>Du: {{user}}</p>
+      <h4>Anzahl Versuche: {{taps}}</h4>
+      <h4>Gefundene Objekte:</h4>
+      <h4>Auto: {{car_found}}</h4>
+      <h4>Du: {{found_objects}}</h4>
     </div>
     <div style="display: inline-block;">
-      <button ion-button (click)="checkTaps()">Auswerten</button>
-      <button ion-button (click)="reset()">Reset</button>
+      <button *ngIf="!checked"  ion-button (click)="checkTaps()">Auswerten</button>
+      <button *ngIf="!checked" ion-button (click)="reset()">Reset</button>
+      <button *ngIf="checked" ion-button color="danger" large (click)="dout()">I DOUBT IT!</button>
+      <button *ngIf="checked" ion-button large (click)="newGame()">Neues Spiel</button>
     </div>
   </ion-toolbar>
 
@@ -20,11 +24,4 @@
 
 <ion-content>
   <canvas id="canvas" (click)="tap($event)"></canvas>
-
-  <p>Anzahl Taps: {{taps}}</p>
-  <p>Anzahl gefundene Objekte: {{found_objects}}</p>
 </ion-content>
-
-<ion-footer text-center>
-  <button ion-button block (click)="dout()">I DOUT IT!</button>
-</ion-footer>
